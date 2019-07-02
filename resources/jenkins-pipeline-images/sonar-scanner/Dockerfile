@@ -8,7 +8,9 @@ ENV PATH $PATH:/root/sonar-scanner-3.0.3.778-linux/bin
 
 WORKDIR /root
 
-RUN apk add --no-cache curl grep sed unzip && \
+RUN apk add --no-cache curl grep sed unzip nodejs npm && \
+    npm install tslint typescript -g && \
+    tslint --init && \
     curl --insecure -o ./sonarscanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778-linux.zip && \
     unzip sonarscanner.zip && \
     rm sonarscanner.zip

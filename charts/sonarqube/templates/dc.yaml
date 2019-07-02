@@ -99,13 +99,13 @@ items:
                   name: sonarqube-credential-configuration
                   key: password
             command: [ "/bin/bash" ]
-            args: [ "-c", "until curl -sL -w %{http_code} -u $API_USER:$API_TOKEN http://jenkins-master:8080 -o /dev/null | grep 200 ; do echo \"waiting on jenkins..\" && sleep 2; done && echo \"waiting on sonarqube...\" && until curl -s -u admin:admin http://localhost:9000/api/system/health | grep -i green ; do echo \"sleeping..\" && sleep 2; done && bash /scripts/script.sh && curl --user \"$API_USER:$API_TOKEN\" --data-urlencode \"script=$(< /scripts2/sonarqube-secret.groovy)\" http://jenkins-master:8080/scriptText && echo \"completed script...\" && tail -f /dev/null"]
+            args: [ "-c", "until curl -sL -w %{http_code} -u $API_USER:$API_TOKEN http://jenkins-master.{{.Release.Namespace}}.svc:8080 -o /dev/null | grep 200 ; do echo \"waiting on jenkins..\" && sleep 2; done && echo \"waiting on sonarqube...\" && until curl -s -u admin:admin http://localhost:9000/api/system/health | grep -i green ; do echo \"sleeping..\" && sleep 2; done && bash /scripts/script.sh && curl --user \"$API_USER:$API_TOKEN\" --data-urlencode \"script=$(< /scripts2/sonarqube-secret.groovy)\" http://jenkins-master.{{.Release.Namespace}}.svc:8080/scriptText && echo \"completed script...\" && tail -f /dev/null"]
             livenessProbe:
               exec:
                 command:
                 - /bin/sh
                 - '-c'
-                - curl -sL -w %{http_code} -u $API_USER:$API_TOKEN http://jenkins-master:8080/credentials/store/system/domain/_/credential/sonarqube/api/json -o /dev/null | grep 200
+                - curl -sL -w %{http_code} -u $API_USER:$API_TOKEN http://jenkins-master.{{.Release.Namespace}}.svc:8080/credentials/store/system/domain/_/credential/sonarqube/api/json -o /dev/null | grep 200
               initialDelaySeconds: 5
               periodSeconds: 5
             volumeMounts:
@@ -156,7 +156,7 @@ items:
         import hudson.tools.InstallSourceProperty
         // Setup the Sonar Scanner configuration
         def sonar = Jenkins.getInstance().getDescriptor("hudson.plugins.sonar.SonarGlobalConfiguration")
-        sonar.setInstallations(new SonarInstallation("SonarQube","http://sonarqube:9000","", "5.3", "", new TriggersConfig(), ""))
+        sonar.setInstallations(new SonarInstallation("SonarQube","http://sonarqube.{{.Release.Namespace}}.svc:9000","", "5.3", "", new TriggersConfig(), ""))
         def scanner = Jenkins.getInstance().getDescriptor("hudson.plugins.sonar.SonarRunnerInstallation")
         def prop = new InstallSourceProperty([new SonarRunnerInstaller("3.0.3.778")])
         scanner.setInstallations(new SonarRunnerInstallation("Sonar Scanner", "", [prop]))
@@ -170,9 +170,9 @@ items:
         app: sonarqube
     data:
       sonarqube.script: |
-        curl -X POST -s -u admin:admin http://sonarqube:9000/api/users/create\?login\=$SQ_USER\&name\=user\&password\=$SQ_PW && \
-        curl -X POST --data "key=sonar.webhooks.global" --data "fieldValues={"name":$SQ_USER, "url":\"http://jenkins-master:8080/sonarqube-webhook/\"}" -u admin:admin http://sonarqube:9000/api/settings/set && \
-        curl -X POST --verbose -u "$API_USER:$API_TOKEN" -H $(curl -u $API_USER:$API_TOKEN 'http://jenkins-master:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)') "http://jenkins-master:8080/credentials/store/system/domain/_/createCredentials" --data-urlencode 'json={
+        curl -X POST -s -u admin:admin http://sonarqube.{{.Release.Namespace}}.svc:9000/api/users/create\?login\=$SQ_USER\&name\=user\&password\=$SQ_PW && \
+        curl -X POST --data "key=sonar.webhooks.global" --data "fieldValues={"name":$SQ_USER, "url":\"http://jenkins-master.{{.Release.Namespace}}.svc:8080/sonarqube-webhook/\"}" -u admin:admin http://sonarqube:9000/api/settings/set && \
+        curl -X POST --verbose -u "$API_USER:$API_TOKEN" -H $(curl -u $API_USER:$API_TOKEN 'http://jenkins-master.{{.Release.Namespace}}.svc:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)') "http://jenkins-master.{{.Release.Namespace}}.svc:8080/credentials/store/system/domain/_/createCredentials" --data-urlencode 'json={
           "": "0",
           "credentials": {
             "scope": "GLOBAL",

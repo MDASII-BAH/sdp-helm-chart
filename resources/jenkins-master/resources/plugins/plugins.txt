@@ -58,6 +58,7 @@ htmlpublisher:1.18
 ivy:2.1
 jackson2-api:2.9.9
 javadoc:1.5
+jaxb:2.3
 jdk-tool:1.2
 jenkins-design-language:1.16.0
 jira:3.0.7
@@ -123,3 +124,4 @@ workflow-scm-step:2.7
 workflow-step-api:2.19
 workflow-support:3.3
 ws-cleanup:0.37
+configuration-as-code

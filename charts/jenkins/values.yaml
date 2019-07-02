@@ -5,6 +5,7 @@ global:
   persistentStorage: true
   domain: apps.ocp.example.com
   sourceRepositoryUrl: "https://github.com/boozallen/sdp-helm-chart"
+  sourceRepositoryBranch: master
   sourceSecret: github
 
 #domain: null

@@ -196,6 +196,15 @@ if (on_openshift){
   )
   SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), cred_obj_2)
 
+  log "Creating Twistlock Secret in Jenkins Credential Store"
+  def cred_obj_3 = (Credentials) new UsernamePasswordCredentialsImpl(
+    CredentialsScope.GLOBAL,
+    "twistlock",
+    "Twistlock Image Scan Account",
+    "svc-jenkins-ci",
+    "changeit"
+  )
+  SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), cred_obj_3)
 
 }
 
@@ -220,4 +229,19 @@ def protocols = jenkins.AgentProtocol.all()
 protocols.each{ p ->
   if (!(p.name in [ "Ping", "JNLP4-connect" ]))
     protocols.remove(p)
+}
+
+
+// create jobs defined by JobDSL Scripts
+def job_dsl = new File("${System.getenv("JENKINS_HOME")}/init.jobdsl.d")
+if (job_dsl.exists()) {
+  def jobManagement = new JenkinsJobManagement(System.out, [:], new File("."))
+
+  job_dsl.eachFileRecurse (FileType.FILES) { script ->
+    try{
+      new DslScriptLoader(jobManagement).runScript(script.text)
+    }catch(any){
+      log "  ERROR: ${any}"
+    }
+  }
 }
