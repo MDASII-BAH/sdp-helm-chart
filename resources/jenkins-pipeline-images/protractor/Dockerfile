@@ -3,6 +3,11 @@
 
 FROM java:openjdk-8-jdk
 
+# fix apt-get update issue for jessie
+RUN echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list && \
+    sed -i '/deb http:\/\/deb.debian.org\/debian jessie-updates main/d' /etc/apt/sources.list && \
+    echo 'Acquire::Check-Valid-Until "false";' >> /etc/apt/apt.conf
+
 # install node
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get install -y nodejs

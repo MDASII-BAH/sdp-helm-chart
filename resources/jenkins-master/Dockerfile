@@ -20,10 +20,16 @@ RUN mkdir -p /tmp/oc-client && cd /tmp/oc-client && \
 # install plugins
 COPY resources/plugins/plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+COPY resources/plugins/twistlock-jenkins-plugin_19_03_321.hpi /var/jenkins_home/plugins/twistlock-jenkins-plugin.hpi
+RUN chmod 777 /var/jenkins_home/plugins/twistlock-jenkins-plugin.hpi
 
 # insert configuration script
 COPY resources/scripts/configure.groovy /var/jenkins_home/init.groovy.d/configure.groovy
 RUN chmod 777 /var/jenkins_home/init.groovy.d/*
+
+# insert job dsl scripts
+COPY resources/jobs/* /var/jenkins_home/init.jobdsl.d/
+RUN chmod 777 /var/jenkins_home/init.jobdsl.d/*
 
 # copy in entry point scripts
 COPY resources/scripts/jenkins-preboot.sh /usr/local/bin/jenkins_preboot
@@ -33,3 +39,4 @@ RUN chmod +x /usr/local/bin/jenkins_preboot && chmod 777 /usr/local/bin/jenkins_
 # modify permissions for OpenShift
 RUN chgrp -R 0 $JENKINS_HOME && \
     chmod -R g=u $JENKINS_HOME /etc/passwd
+

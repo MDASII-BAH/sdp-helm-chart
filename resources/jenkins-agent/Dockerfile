@@ -6,10 +6,10 @@ FROM docker:dind
 ENV JENKINS_SWARM_VERSION 3.9
 ENV JNLP_SLAVE_VERSION 3.9
 ENV HOME /root
-ENV JAVA_HOME /usr/lib/jvm/java
+ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
 
 RUN mkdir -p /opt/jenkins-slave/bin ${HOME} && \
-    apk add --no-cache curl openjdk8 git device-mapper openssl-dev build-base nss && \
+    apk add --no-cache curl openjdk8 git device-mapper openssl-dev openssl build-base nss maven && \
     # install docker-compose
     apk add --no-cache py-pip curl supervisor libffi-dev python-dev && \
     pip install docker-compose && \

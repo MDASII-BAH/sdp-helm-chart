@@ -14,8 +14,8 @@ dockerContextDir: resources/sonarqube
 #imageTag: null # defaults to .Chart.version
 resources:
     limits:
-      cpu: "250m"
-      memory: "2000Mi"
+      cpu: "1500m"
+      memory: "4000Mi"
     requests:
       cpu: "250m"
       memory: "2000Mi"
