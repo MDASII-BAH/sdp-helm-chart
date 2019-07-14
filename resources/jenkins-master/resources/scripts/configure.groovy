@@ -10,6 +10,7 @@ import hudson.model.*
 import jenkins.model.*
 import hudson.security.*
 import jenkins.security.*
+import org.jenkinsci.plugins.plaincredentials.*
 import org.jenkinsci.plugins.plaincredentials.impl.*
 import com.cloudbees.plugins.credentials.*
 import com.cloudbees.plugins.credentials.impl.*
@@ -196,26 +197,25 @@ if (on_openshift){
     sa_token
   )
   SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), cred_obj_2)
-
-  log "Creating Twistlock Secret in Jenkins Credential Store"
-  def cred_obj_3 = (Credentials) new UsernamePasswordCredentialsImpl(
-    CredentialsScope.GLOBAL,
-    "twistlock",
-    "Twistlock Image Scan Account",
-    "svc-jenkins-ci",
-    "changeit"
-  )
-  SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), cred_obj_3)
-
-  log "Creating Tiller Token Secret for mdas2 in Jenkins Credential Store"
-  def cred_obj_4 = (Credentials) new StringCredentialsImpl(
-    CredentialsScope.GLOBAL,
-    "mdas2-tiller",
-    "Tiller Token Secret for mdas2",
-    "eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJtZGFzMi10aWxsZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlY3JldC5uYW1lIjoidGlsbGVyLXRva2VuLWpyaGpzIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6InRpbGxlciIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6Ijg3NDFkNzczLTljZTQtMTFlOS1hOTY5LTAyNjI0NDExMGRlNiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDptZGFzMi10aWxsZXI6dGlsbGVyIn0.HAqN4vh5uMMu8uRKU7Kv4qfaND0rIwsIC4ZYYIoGrpLwDiKOdMBkXko8rJEvJlK5OoZ2FlSHarxyAlk9lTyrjXLYTV_ajV3xXAPpBcD4Ah21K9ZL1HKUyq54lnBf2Qar-CKaX6FsELKUftQyF72aM5ZYDYTblrVG0J6G50qmXn3sbCcgNpHCJ2epzcMBN1jAEWI4WlHUhP1RvSxVYPjQdXyGrKVoTPRV8IZdaQg6fHox6_0fH4j7WQanqt96YzSX3Smsbf1GON5fdSmXGoPQfGScy5TlHxzM0RcZYK9ZE9DWQkiF1-TN7OAvP86HZDX5jjFad4sYZ_JcnHbNZv2zeg",
-  )
-  SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), cred_obj_4)
 }
+
+log "Creating Twistlock Secret in Jenkins Credential Store"
+def cred_obj_3 = (Credentials) new UsernamePasswordCredentialsImpl(
+  CredentialsScope.GLOBAL,
+  "twistlock",
+  "Twistlock Image Scan Account",
+  "svc-jenkins-ci",
+  "changeit"
+)
+SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), cred_obj_3)
+
+log "Creating Tiller Token Secret for mdas2 in Jenkins Credential Store"
+def cred_obj_4 = (Credentials) new StringCredentialsImpl(
+  CredentialsScope.GLOBAL,
+  "mdas2-tiller",
+  "Tiller Token Secret for mdas2",
+  Secret.fromString("eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJtZGFzMi10aWxsZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlY3JldC5uYW1lIjoidGlsbGVyLXRva2VuLWpyaGpzIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6InRpbGxlciIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6Ijg3NDFkNzczLTljZTQtMTFlOS1hOTY5LTAyNjI0NDExMGRlNiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDptZGFzMi10aWxsZXI6dGlsbGVyIn0.HAqN4vh5uMMu8uRKU7Kv4qfaND0rIwsIC4ZYYIoGrpLwDiKOdMBkXko8rJEvJlK5OoZ2FlSHarxyAlk9lTyrjXLYTV_ajV3xXAPpBcD4Ah21K9ZL1HKUyq54lnBf2Qar-CKaX6FsELKUftQyF72aM5ZYDYTblrVG0J6G50qmXn3sbCcgNpHCJ2epzcMBN1jAEWI4WlHUhP1RvSxVYPjQdXyGrKVoTPRV8IZdaQg6fHox6_0fH4j7WQanqt96YzSX3Smsbf1GON5fdSmXGoPQfGScy5TlHxzM0RcZYK9ZE9DWQkiF1-TN7OAvP86HZDX5jjFad4sYZ_JcnHbNZv2zeg"))
+SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), cred_obj_4)
 
 // optimize agents disconnecting post termination
 log "Configuring optmized agent pod deregistration settings"
@@ -226,8 +226,8 @@ jenkins.injector.getInstance(hudson.slaves.ChannelPinger.class).@pingTimeoutSeco
 log "Turning on Agent -> Master Control"
 jenkins.injector.getInstance(AdminWhitelistRule.class).setMasterKillSwitch(false)
 
-log "Disabling CLI Over Remoting"
-jenkins.CLI.get().setEnabled(false)
+// log "Disabling CLI Over Remoting"
+// jenkins.CLI.get().setEnabled(false)
 
 log "Enabling CSRF Protection"
 jenkins.setCrumbIssuer(new DefaultCrumbIssuer(true))
