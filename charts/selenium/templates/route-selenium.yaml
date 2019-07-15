@@ -15,6 +15,9 @@ spec:
   {{- else if .Values.global.domain }}
   host: "{{.Values.subdomain}}.{{.Values.global.domain}}"
   {{- end }}
+  tls:
+    insecureEdgeTerminationPolicy: Allow
+    termination: edge
   port:
     targetPort: 4444-tcp
   to:

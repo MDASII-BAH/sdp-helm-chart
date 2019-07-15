@@ -14,6 +14,9 @@ spec:
   {{- else if .Values.global.domain }}
   host: "{{.Values.subdomain}}.{{.Values.global.domain}}"
   {{- end }}
+  tls:
+    insecureEdgeTerminationPolicy: Allow
+    termination: edge
   to:
     kind: Service
     name: jenkins-master
