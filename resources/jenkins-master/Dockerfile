@@ -24,13 +24,13 @@ COPY resources/plugins/twistlock-jenkins-plugin_19_03_321.hpi /var/jenkins_home/
 RUN chmod 777 /var/jenkins_home/plugins/twistlock-jenkins-plugin.hpi
 
 # insert configuration script
-COPY resources/scripts/configure.groovy /var/jenkins_home/init.groovy.d/configure.groovy
-COPY resources/scripts/configure-twistlock.groovy /var/jenkins_home/init.groovy.d/configure-twistlock.groovy
-RUN chmod 777 /var/jenkins_home/init.groovy.d/*
+COPY resources/scripts/configure.groovy /usr/share/jenkins/ref/init.groovy.d/configure.groovy
+COPY resources/scripts/configure-twistlock.groovy /usr/share/jenkins/ref/init.groovy.d/configure-twistlock.groovy
+RUN chmod -R 777 /usr/share/jenkins/ref/init.groovy.d/*
 
 # insert job dsl scripts
-COPY resources/jobs/* /var/jenkins_home/init.jobdsl.d/
-RUN chmod 777 /var/jenkins_home/init.jobdsl.d/*
+COPY resources/jobs/* /usr/share/jenkins/ref/init.jobdsl.d/
+RUN chmod -R 777 /usr/share/jenkins/ref/init.jobdsl.d/*
 
 # copy in entry point scripts
 COPY resources/scripts/jenkins-preboot.sh /usr/local/bin/jenkins_preboot
