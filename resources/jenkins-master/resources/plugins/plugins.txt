@@ -117,7 +117,7 @@ windows-slaves
 workflow-aggregator
 workflow-api
 workflow-basic-steps
-workflow-cps
+workflow-cps:2.70
 workflow-cps-global-lib
 workflow-durable-task-step
 workflow-job

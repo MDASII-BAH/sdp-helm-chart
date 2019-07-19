@@ -20,8 +20,7 @@ RUN mkdir -p /tmp/oc-client && cd /tmp/oc-client && \
 # install plugins
 COPY resources/plugins/plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
-COPY resources/plugins/twistlock-jenkins-plugin_19_03_321.hpi /var/jenkins_home/plugins/twistlock-jenkins-plugin.hpi
-RUN chmod 777 /var/jenkins_home/plugins/twistlock-jenkins-plugin.hpi
+COPY resources/plugins/twistlock-jenkins-plugin_19_03_321.hpi /usr/share/jenkins/ref/plugins/twistlock-jenkins-plugin.hpi
 
 # insert configuration script
 COPY resources/scripts/configure.groovy /usr/share/jenkins/ref/init.groovy.d/configure.groovy
