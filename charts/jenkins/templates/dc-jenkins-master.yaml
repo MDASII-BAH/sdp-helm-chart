@@ -52,15 +52,20 @@ spec:
             cpu: {{ .Values.resources.master.requests.cpu | quote }}
             memory: {{ .Values.resources.master.requests.memory | quote }}
         volumeMounts:
-          - name: jenkins-credential-configuration
-            mountPath: /var/jenkins_home/init.groovy.d/configure_credentials.groovy
-            subPath: configure_credentials.groovy
+          - mountPath: /var/jenkins_home
+            name: jenkins-data
+          # - name: jenkins-credential-configuration
+          #   mountPath: /var/jenkins_home/init.groovy.d/configure_credentials.groovy
+          #   subPath: configure_credentials.groovy
         securityContext:
           privileged: true
       volumes:
-        - name: jenkins-credential-configuration
-          secret:
-            secretName: jenkins-credential-configuration
-            items:
-            - key: credential-configuration
-              path: configure_credentials.groovy
+        # - name: jenkins-credential-configuration
+        #   secret:
+        #     secretName: jenkins-credential-configuration
+        #     items:
+        #     - key: credential-configuration
+        #       path: configure_credentials.groovy
+        - name: jenkins-data
+          persistentVolumeClaim:
+            claimName: jenkins-master

@@ -23,14 +23,14 @@ resources:
       cpu: "1000m"
       memory: "4000Mi"
     requests:
-      cpu: "1000m"
-      memory: "4000Mi"
+      cpu: "500m"
+      memory: "1000Mi"
   agent:
     limits:
       cpu: "1000m"
       memory: "1500Mi"
     requests:
-      cpu: "1000m"
-      memory: "1500Mi"
+      cpu: "500m"
+      memory: "500Mi"
 dockerStorage: "100Gi"
 dockerDaemonArgs: "--insecure-registry docker-registry.default.svc:5000"
