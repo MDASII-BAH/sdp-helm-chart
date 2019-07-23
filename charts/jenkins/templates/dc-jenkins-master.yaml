@@ -39,6 +39,16 @@ spec:
         - name: OPENSHIFT
           value: "true"
         {{- end }}
+        - name: GITHUB_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: github
+        - name: GITHUB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: github
         ports:
         - containerPort: 8080
           protocol: TCP

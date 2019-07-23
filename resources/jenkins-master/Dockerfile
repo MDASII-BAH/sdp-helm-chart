@@ -1,7 +1,7 @@
 # Copyright © 2018 Booz Allen Hamilton. All Rights Reserved.
 # This software package is licensed under the Booz Allen Public License. The license can be found in the License file or at http://boozallen.github.io/licenses/bapl
 
-FROM jenkins/jenkins:2.176.1
+FROM jenkins/jenkins:2.176.2
 
 ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false"
 ENV JTE_RELEASE "1.1.1"
@@ -23,8 +23,9 @@ RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 COPY resources/plugins/twistlock-jenkins-plugin_19_03_321.hpi /usr/share/jenkins/ref/plugins/twistlock-jenkins-plugin.hpi
 
 # insert configuration script
-COPY resources/scripts/configure.groovy /usr/share/jenkins/ref/init.groovy.d/configure.groovy
-COPY resources/scripts/configure-twistlock.groovy /usr/share/jenkins/ref/init.groovy.d/configure-twistlock.groovy
+COPY resources/scripts/01-configure.groovy /usr/share/jenkins/ref/init.groovy.d/01-configure.groovy
+COPY resources/scripts/02-configure-github.groovy /usr/share/jenkins/ref/init.groovy.d/02-configure-github.groovy
+COPY resources/scripts/03-configure-twistlock.groovy /usr/share/jenkins/ref/init.groovy.d/03-configure-twistlock.groovy
 RUN chmod -R 777 /usr/share/jenkins/ref/init.groovy.d/*
 
 # insert job dsl scripts

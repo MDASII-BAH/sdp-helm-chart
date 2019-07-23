@@ -30,12 +30,12 @@ import org.jenkinsci.plugins.github_branch_source.GitHubConfiguration
 import org.jenkinsci.plugins.github_branch_source.Endpoint
 
 // for shared libraries
-import org.jenkinsci.plugins.workflow.libs.GlobalLibraries
-import org.jenkinsci.plugins.workflow.libs.LibraryConfiguration
-import org.jenkinsci.plugins.workflow.libs.SCMSourceRetriever
-import org.jenkinsci.plugins.workflow.libs.SCMRetriever
-import org.jenkinsci.plugins.github_branch_source.GitHubSCMSource
-import hudson.plugins.filesystem_scm.FSSCM
+// import org.jenkinsci.plugins.workflow.libs.GlobalLibraries
+// import org.jenkinsci.plugins.workflow.libs.LibraryConfiguration
+// import org.jenkinsci.plugins.workflow.libs.SCMSourceRetriever
+// import org.jenkinsci.plugins.workflow.libs.SCMRetriever
+// import org.jenkinsci.plugins.github_branch_source.GitHubSCMSource
+// import hudson.plugins.filesystem_scm.FSSCM
 
 // for security
 import jenkins.security.s2m.AdminWhitelistRule
@@ -208,6 +208,15 @@ def cred_obj_github = (Credentials) new UsernamePasswordCredentialsImpl(
 )
 SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), cred_obj_github)
 
+log "Creating Github Token in Jenkins Credential Store"
+def cred_obj_github_token = (Credentials) new StringCredentialsImpl(
+  CredentialsScope.GLOBAL,
+  "github-token",
+  "Github Account Token",
+  Secret.fromString(System.getenv("GITHUB_PASSWORD"))
+)
+SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), cred_obj_github_token)
+
 log "Creating Twistlock Secret in Jenkins Credential Store"
 def cred_obj_twistlock = (Credentials) new UsernamePasswordCredentialsImpl(
   CredentialsScope.GLOBAL,
@@ -221,7 +230,7 @@ SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(
 log "Creating Tiller Token Secret for mdas2 in Jenkins Credential Store"
 def cred_obj_tiller = (Credentials) new StringCredentialsImpl(
   CredentialsScope.GLOBAL,
-  "mdas2-tiller",
+  "bdso-tiller",
   "Tiller Token Secret",
   Secret.fromString("eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJtZGFzMi10aWxsZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlY3JldC5uYW1lIjoidGlsbGVyLXRva2VuLWpyaGpzIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6InRpbGxlciIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6Ijg3NDFkNzczLTljZTQtMTFlOS1hOTY5LTAyNjI0NDExMGRlNiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDptZGFzMi10aWxsZXI6dGlsbGVyIn0.HAqN4vh5uMMu8uRKU7Kv4qfaND0rIwsIC4ZYYIoGrpLwDiKOdMBkXko8rJEvJlK5OoZ2FlSHarxyAlk9lTyrjXLYTV_ajV3xXAPpBcD4Ah21K9ZL1HKUyq54lnBf2Qar-CKaX6FsELKUftQyF72aM5ZYDYTblrVG0J6G50qmXn3sbCcgNpHCJ2epzcMBN1jAEWI4WlHUhP1RvSxVYPjQdXyGrKVoTPRV8IZdaQg6fHox6_0fH4j7WQanqt96YzSX3Smsbf1GON5fdSmXGoPQfGScy5TlHxzM0RcZYK9ZE9DWQkiF1-TN7OAvP86HZDX5jjFad4sYZ_JcnHbNZv2zeg"))
 SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), cred_obj_tiller)
